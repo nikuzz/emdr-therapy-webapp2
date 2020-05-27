@@ -1,5 +1,5 @@
-# emdr-therapy-webapp
-A simple web application for a self administrated EMDR treatment. The hosted web application is [here](https://ggeorgip.github.io/emdr-therapy-webapp/). Can be saved and used offline. Once opened, right click on the gray area and select "Save as..." to save as fully functional offline HTML application.
+# emdr-therapy-webapp2
+A simple web application for a self administrated EMDR treatment.Can be saved and used offline.
 
 <br/>
 
@@ -22,14 +22,6 @@ By combining and using those three different stimulation techniques in parallel 
 
 #### Hardware devices
 There are a couple of hardware devices serving the same purpose. Their main disadvantage is the high price and limited availability in some world regions.
-
-
-#### Contacts
-
-I can be contacted regarding the development of this application at ggeorgip in gmail. 
-
-<br/>
-<br/>
 
 ##### Further information
 * EMDR Institute Inc. ([emdr.com](http://www.emdr.com/))
