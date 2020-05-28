@@ -31,7 +31,9 @@
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
+    "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
+    "verte": "0.0.12",
     "vue": "^2.6.11"
   }
 }
