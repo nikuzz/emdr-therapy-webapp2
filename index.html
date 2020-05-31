@@ -24,11 +24,11 @@
                     </b-form>
                 </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
-                    <b-button-close v-on:click="close"></b-button-close>
+                    <b-button-close v-on:click="closeFullScreeen"></b-button-close>
                 </b-navbar-nav>
             </b-navbar>
-            <div id="emdr-squares">
-                <span v-bind:class="[circle ? 'circle' : '', 'emdr-square']" v-for="n in squareNumber" v-bind:style="{ backgroundColor: ( n == squareActive ? foreground : background ), width: width + 'px', height: width + 'px' }"></span>
+            <div id="emdr-squares" v-on:click="toggleRun">
+                <span v-bind:class="[circle ? 'circle' : '', 'emdr-square']" v-for="n in squareNumber" v-bind:style="{ backgroundColor: ( n == squareActive ? foreground : background ), width: width + 'px', height: width + 'px', marginTop: (direction == '1' ? squareMarginTop * n + 'px' : 'auto'), marginBottom: (direction == '2' ? squareMarginTop * n + 'px' : 'auto')}"></span>
             </div>
         </div>
         <script src="dist/app.js"></script>

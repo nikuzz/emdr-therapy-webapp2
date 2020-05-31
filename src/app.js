@@ -10,7 +10,6 @@ var app = new Vue({
     data: {
         directions: [
             {value: 'H', text: 'Horizontal [H]'},
-            {value: 'V', text: 'Vertical [V]'},
             {value: '1', text: 'Oblicua 1 [1]'},
             {value: '2', text: 'Oblicua 2 [2]'},
         ],
@@ -19,19 +18,18 @@ var app = new Vue({
         durationTotal: 30,
         startRun: 0,
         startRound: 0,
-        runDirection: 0,
         width: 30,
         background: 'rgb(0,0,0)',
         foreground: 'rgb(255,0,0)',
         sound: false,
         menu: true,
-        fullscreen: false,
         isRun: false,
         windowWidth: window.innerWidth,
         windowHeight: window.innerHeight,
         squareActive: 1,
         circle: false,
         roundProgress: null,
+        timeoutClick: null,
     },
     computed: {
         squareNumber: function () {
@@ -39,6 +37,9 @@ var app = new Vue({
         },
         roundInterval: function () {
             return (((60 / this.speed)) * 1000);
+        },
+        squareMarginTop: function () {
+            return this.windowHeight / (this.squareNumber + 1);
         }
     },
     methods: {
@@ -84,6 +85,11 @@ var app = new Vue({
             } else {
                 var nextSquareActive = Math.ceil((1 - this.roundProgress) * this.squareNumber);
                 if (nextSquareActive <= 1) {
+                    //check duration
+                    if ((timestamp - this.startRun) >= (this.durationTotal * 1000)) {
+                        this.isRun = false;
+                        return;
+                    }
                     this.startRound = timestamp;
                     this.runDirection = 0;
                     this.squareActive = 1;
@@ -96,8 +102,16 @@ var app = new Vue({
             }
             window.requestAnimationFrame(this.nextSquare);
         },
-        close() {
+        closeFullScreeen() {
             document.exitFullscreen();
+        },
+        fullScreen() {
+            if (document.fullscreenEnabled) {
+                document.documentElement.requestFullscreen();
+            }
+        },
+        toggleRun() {
+            this.isRun = !this.isRun;
         },
     },
     watch: {
@@ -105,9 +119,7 @@ var app = new Vue({
             if (val) {
                 this.menu = false;
                 this.startRun = null;
-                if (document.fullscreenEnabled) {
-                    document.documentElement.requestFullscreen();
-                }
+                this.fullScreen();
                 if (this.sound) {
                     playSound("left");
                 }
@@ -163,9 +175,6 @@ var app = new Vue({
                     break;
                 case 72: //h
                     this.direction = 'H';
-                    break;
-                case 86: //v
-                    this.direction = 'V';
                     break;
                 case 49: //1
                 case 97: //1
