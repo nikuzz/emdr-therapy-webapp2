@@ -14,11 +14,18 @@ html, body {
 
 #emdr-squares{
     display: flex;
+    justify-content: space-between;
     height: 100%;
+    width: 100%;
     line-height: 100%;
 }
 
 .emdr-square{
     display: inline-block;
     margin: auto;
+    /*border: 1px solid white;*/
+}
+
+.emdr-square.circle{
+    border-radius: 50%;
 }

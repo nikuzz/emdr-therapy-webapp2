@@ -6,34 +6,29 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     </head>
     <body>
-        <div id="app" v-bind:style="{ backgroundColor: background}">
-            <div>
-                <b-navbar type="dark" variant="dark" fixed="top" v-show="menu">
-                    <b-navbar-brand>EMDR</b-navbar-brand>
-                    <b-navbar-nav>
-                        <b-form inline>
-                            <b-button-group class="mx-1">
-                                <b-button :pressed.sync="isRun" v-if="isRun" variant="primary">Para [↵]</b-button>
-                                <b-button :pressed.sync="isRun" v-else variant="primary">Inicia [↵]</b-button>
-                                <b-button v-on:click="reset" variant="danger">Reset [R]</b-button>
-                            </b-button-group>
-                            <b-form-select v-model="direction" :options="directions" class="mx-1"></b-form-select>
-                            <b-form-spinbutton v-model="speed" min="1" max="240" :formatter-fn="speedFormatter" class="mx-1"></b-form-spinbutton>
-                            <b-form-spinbutton v-model="durationTotal" min="1" max="999" :formatter-fn="durationTotalFormatter" class="mx-1"></b-form-spinbutton>
-                            <b-form-spinbutton v-model="width" min="1" max="100" :formatter-fn="widthFormatter" class="mx-1"></b-form-spinbutton>
-                            <verte v-model="background" model="rgb" class="mx-1"></verte>
-                            <verte v-model="foreground" model="rgb" class="mx-1"></verte>
-                            <b-form-checkbox v-model="sound" size="lg" class="mx-1">Sonido [S]</b-form-checkbox>
-                        </b-form>
-                    </b-navbar-nav>
-                    <b-navbar-nav class="ml-auto">
-                        <b-button :pressed.sync="menu" title="Quita menu" variant="outline-primary" :class="{'btn-primary':menu==true}">[☰]</b-button>
-                        <b-button :pressed.sync="fullscreen" title="Pantalla Completa" variant="outline-primary" :class="{'btn-primary':fullscreen==true}">[F]</b-button>
-                    </b-navbar-nav>
-                </b-navbar>
-                <div id="emdr-squares">
-                    <span class="emdr-square" v-for="n in squareNumber" v-bind:style="{ backgroundColor: ( n == squareActive ? foreground : background ), width: width + 'px', height: width + 'px' }"></span>
-                </div>
+        <div id="app" v-bind:style="{ backgroundColor: background, cursor: (isRun ? 'none' : '')}">
+            <b-navbar type="dark" variant="dark" fixed="top" v-show="menu">
+                <b-navbar-brand>EMDR</b-navbar-brand>
+                <b-navbar-nav>
+                    <b-form inline>
+                        <b-button :pressed.sync="isRun" v-if="isRun" variant="danger" class="mx-1">Para [↵]</b-button>
+                        <b-button :pressed.sync="isRun" v-else variant="success" class="mx-1">Inicia [↵]</b-button>
+                        <b-form-select v-model="direction" :options="directions" class="mx-1"></b-form-select>
+                        <b-form-spinbutton v-model="speed" min="1" max="240" :formatter-fn="speedFormatter" class="mx-1"></b-form-spinbutton>
+                        <b-form-spinbutton v-model="durationTotal" min="1" max="999" :formatter-fn="durationTotalFormatter" class="mx-1"></b-form-spinbutton>
+                        <b-form-spinbutton v-model="width" min="1" max="100" :formatter-fn="widthFormatter" class="mx-1"></b-form-spinbutton>
+                        <verte v-model="background" model="rgb" class="mx-1"></verte>
+                        <verte v-model="foreground" model="rgb" class="mx-1"></verte>
+                        <b-form-checkbox v-model="circle" size="lg" class="mx-1">Circulitos [C]</b-form-checkbox>
+                        <b-form-checkbox v-model="sound" size="lg" class="mx-1">Sonido [S]</b-form-checkbox>
+                    </b-form>
+                </b-navbar-nav>
+                <b-navbar-nav class="ml-auto">
+                    <b-button-close v-on:click="close"></b-button-close>
+                </b-navbar-nav>
+            </b-navbar>
+            <div id="emdr-squares">
+                <span v-bind:class="[circle ? 'circle' : '', 'emdr-square']" v-for="n in squareNumber" v-bind:style="{ backgroundColor: ( n == squareActive ? foreground : background ), width: width + 'px', height: width + 'px' }"></span>
             </div>
         </div>
         <script src="dist/app.js"></script>

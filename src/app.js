@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import { BootstrapVue, BButton } from 'bootstrap-vue';
+Vue.component('b-button', BButton)
 Vue.use(BootstrapVue);
-Vue.use(IconsPlugin);
 import Verte from 'verte';
 import 'verte/dist/verte.css';
 var app = new Vue({
@@ -15,9 +15,10 @@ var app = new Vue({
             {value: '2', text: 'Oblicua 2 [2]'},
         ],
         direction: 'H',
-        speed: 60,
+        speed: 120,
         durationTotal: 30,
         startRun: 0,
+        startRound: 0,
         runDirection: 0,
         width: 30,
         background: 'rgb(0,0,0)',
@@ -29,14 +30,15 @@ var app = new Vue({
         windowWidth: window.innerWidth,
         windowHeight: window.innerHeight,
         squareActive: 1,
-        intervalHandler: null,
+        circle: false,
+        roundProgress: null,
     },
     computed: {
         squareNumber: function () {
-            return Math.floor(this.windowWidth / this.width);
+            return Math.min(Math.floor(this.windowWidth / this.width), Math.ceil(this.windowWidth / this.speed));
         },
-        changeInterval: function () {
-            return (((60 / this.speed) / this.squareNumber) * 1000);
+        roundInterval: function () {
+            return (((60 / this.speed)) * 1000);
         }
     },
     methods: {
@@ -51,36 +53,68 @@ var app = new Vue({
         },
         reset() {
             this.isRun = false;
-            this.squareActive = 1;
-            this.startRun = 0;
+            this.startRun = null;
+            this.startRound = null;
             this.runDirection = 0;
+            this.squareActive = 1;
         },
-        nextSquare() {
-            if (this.squareActive <= 1) {
-                this.runDirection = 0;
-                this.squareActive = 1;
+        nextSquare(timestamp) {
+            if (!this.isRun) {
+                return;
             }
-            if (this.squareActive >= this.squareNumber) {
-                this.runDirection = 1;
-                this.squareActive = this.squareNumber;
+            if (!this.startRun) {
+                this.startRun = timestamp;
+                this.startRound = timestamp;
             }
+
+            this.roundProgress = (timestamp - this.startRound) / this.roundInterval;
+
             if (this.runDirection == 0) {
-                this.squareActive++;
+                var nextSquareActive = Math.ceil(this.roundProgress * this.squareNumber);
+                if (nextSquareActive >= this.squareNumber) {
+                    this.startRound = timestamp;
+                    this.runDirection = 1;
+                    this.squareActive = this.squareNumber;
+                    if (this.sound) {
+                        playSound("right");
+                    }
+                } else {
+                    this.squareActive = nextSquareActive;
+                }
             } else {
-                this.squareActive--;
+                var nextSquareActive = Math.ceil((1 - this.roundProgress) * this.squareNumber);
+                if (nextSquareActive <= 1) {
+                    this.startRound = timestamp;
+                    this.runDirection = 0;
+                    this.squareActive = 1;
+                    if (this.sound) {
+                        playSound("left");
+                    }
+                } else {
+                    this.squareActive = nextSquareActive;
+                }
             }
-            var self = this;
-            this.intervalHandler = setTimeout(function () {
-                self.nextSquare();
-            }, this.changeInterval);
+            window.requestAnimationFrame(this.nextSquare);
+        },
+        close() {
+            document.exitFullscreen();
         },
     },
     watch: {
         isRun: function (val) {
-            if (val == true) {
-                this.nextSquare();
+            if (val) {
+                this.menu = false;
+                this.startRun = null;
+                if (document.fullscreenEnabled) {
+                    document.documentElement.requestFullscreen();
+                }
+                if (this.sound) {
+                    playSound("left");
+                }
+                window.requestAnimationFrame(this.nextSquare);
             } else {
-                clearTimeout(this.intervalHandler);
+                this.menu = true;
+                this.reset();
             }
         },
     },
@@ -91,13 +125,11 @@ var app = new Vue({
                 case 32: //space
                     this.isRun = !this.isRun;
                     break;
-                case 115: //s
+                case 27: // ESC
+                    this.isRun = false;
+                    break;
                 case 83: //S
                     this.sound = !this.sound;
-                    break;
-                case 114://r
-                case 82: //R
-                    this.reset();
                     break;
                 case 37: //ArrowLeft
                     if (this.durationTotal > 1) {
@@ -126,8 +158,24 @@ var app = new Vue({
                 case 77: //m
                     this.menu = !this.menu;
                     break;
+                case 67: //c
+                    this.circle = !this.circle;
+                    break;
+                case 72: //h
+                    this.direction = 'H';
+                    break;
+                case 86: //v
+                    this.direction = 'V';
+                    break;
+                case 49: //1
+                case 97: //1
+                    this.direction = '1';
+                    break;
+                case 50: //2
+                case 98: //2
+                    this.direction = '2';
+                    break;
                 default:
-                    console.log(e);
                     break;
             }
         }.bind(this));
@@ -136,4 +184,38 @@ var app = new Vue({
             this.windowHeight = window.innerHeight;
         }.bind(this));
     }
-})
+});
+
+// https://jsfiddle.net/teropa/bwxwhoqr/1/
+const LENGTH_MS = 100;
+
+const REAL_TIME_FREQUENCY = 442;
+const ANGULAR_FREQUENCY = REAL_TIME_FREQUENCY * 2 * Math.PI;
+const LENGTH = (LENGTH_MS / 1000) * 44100;
+
+let audioContext = new AudioContext();
+let myLeftChannelBuffer = audioContext.createBuffer(2, LENGTH, 44100); // 2 channels
+let myRightChannelBuffer = audioContext.createBuffer(2, LENGTH, 44100); // 2 channels
+let myLeftArray = myLeftChannelBuffer.getChannelData(0);
+let myRightArray = myRightChannelBuffer.getChannelData(1);
+for (let sampleNumber = 0; sampleNumber < LENGTH; sampleNumber++) {
+    myLeftArray[sampleNumber] = generateSample(sampleNumber);
+    myRightArray[sampleNumber] = generateSample(sampleNumber);
+}
+
+function generateSample(sampleNumber) {
+    let currentTime = sampleNumber / 44100;
+    let currentAngle = currentTime * ANGULAR_FREQUENCY;
+    return Math.sin(currentAngle);
+}
+
+function playSound(channel) {
+    let src = audioContext.createBufferSource();
+    if (channel == 'left') {
+        src.buffer = myLeftChannelBuffer;
+    } else if (channel == 'right') {
+        src.buffer = myRightChannelBuffer;
+    }
+    src.connect(audioContext.destination);
+    src.start();
+}
