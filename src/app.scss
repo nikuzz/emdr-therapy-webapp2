@@ -11,3 +11,14 @@ html, body {
     display: flex;
     height: 100%;
 }
+
+#emdr-squares{
+    display: flex;
+    height: 100%;
+    line-height: 100%;
+}
+
+.emdr-square{
+    display: inline-block;
+    margin: auto;
+}

@@ -8,7 +8,7 @@
     <body>
         <div id="app" v-bind:style="{ backgroundColor: background}">
             <div>
-                <b-navbar type="dark" variant="dark" fixed="top">
+                <b-navbar type="dark" variant="dark" fixed="top" v-show="menu">
                     <b-navbar-brand>EMDR</b-navbar-brand>
                     <b-navbar-nav>
                         <b-form inline>
@@ -18,8 +18,8 @@
                                 <b-button v-on:click="reset" variant="danger">Reset [R]</b-button>
                             </b-button-group>
                             <b-form-select v-model="direction" :options="directions" class="mx-1"></b-form-select>
-                            <b-form-spinbutton v-model="speed" min="1" max="100" :formatter-fn="speedFormatter" class="mx-1"></b-form-spinbutton>
-                            <b-form-spinbutton v-model="duration" min="1" max="999" :formatter-fn="durationFormatter" class="mx-1"></b-form-spinbutton>
+                            <b-form-spinbutton v-model="speed" min="1" max="240" :formatter-fn="speedFormatter" class="mx-1"></b-form-spinbutton>
+                            <b-form-spinbutton v-model="durationTotal" min="1" max="999" :formatter-fn="durationTotalFormatter" class="mx-1"></b-form-spinbutton>
                             <b-form-spinbutton v-model="width" min="1" max="100" :formatter-fn="widthFormatter" class="mx-1"></b-form-spinbutton>
                             <verte v-model="background" model="rgb" class="mx-1"></verte>
                             <verte v-model="foreground" model="rgb" class="mx-1"></verte>
@@ -31,6 +31,9 @@
                         <b-button :pressed.sync="fullscreen" title="Pantalla Completa" variant="outline-primary" :class="{'btn-primary':fullscreen==true}">[F]</b-button>
                     </b-navbar-nav>
                 </b-navbar>
+                <div id="emdr-squares">
+                    <span class="emdr-square" v-for="n in squareNumber" v-bind:style="{ backgroundColor: ( n == squareActive ? foreground : background ), width: width + 'px', height: width + 'px' }"></span>
+                </div>
             </div>
         </div>
         <script src="dist/app.js"></script>
