@@ -24,7 +24,7 @@
   "homepage": "https://github.com/nikuzz/emdr-therapy-webapp2#readme",
   "devDependencies": {
     "cross-env": "^7.0.2",
-    "laravel-mix": "^5.0.4",
+    "laravel-mix": "^6.0.25",
     "resolve-url-loader": "^3.1.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
