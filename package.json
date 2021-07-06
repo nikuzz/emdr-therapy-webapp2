@@ -1,15 +1,15 @@
 {
   "name": "emdr-therapy-webapp2",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple web application for a self administrated EMDR treatment.Can be saved and used offline.",
   "main": "index.js",
   "scripts": {
     "dev": "npm run development",
-    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js",
     "watch": "npm run development -- --watch",
     "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
     "prod": "npm run production",
-    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "repository": {
     "type": "git",
@@ -28,12 +28,13 @@
     "resolve-url-loader": "^3.1.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
+    "vue-loader": "^15.9.7",
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
     "verte": "0.0.12",
-    "vue": "^2.6.11"
+    "vue": "^2.6.14"
   }
 }
