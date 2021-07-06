@@ -1,0 +1,17 @@
+/*!
+ * Vue.js v2.6.14
+ * (c) 2014-2021 Evan You
+ * Released under the MIT License.
+ */
+
+/**
+    * Verte v0.0.12
+    * (c) 2019 Baianat
+    * @license MIT
+    */
+
+/**
+  * color-fns v0.0.10
+  * (c) 2019 Baianat
+  * @license MIT
+  */
