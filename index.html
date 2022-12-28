@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
     <head>
         <title>EMDR</title>
         <meta charset="UTF-8">
@@ -11,16 +11,16 @@
                 <b-navbar-brand>EMDR</b-navbar-brand>
                 <b-navbar-nav>
                     <b-form inline>
-                        <b-button :pressed.sync="isRun" v-if="isRun" variant="danger" class="mx-1">Para [↵]</b-button>
-                        <b-button :pressed.sync="isRun" v-else variant="success" class="mx-1">Inicia [↵]</b-button>
+                        <b-button :pressed.sync="isRun" v-if="isRun" variant="danger" class="mx-1">For [↵]</b-button>
+                        <b-button :pressed.sync="isRun" v-else variant="success" class="mx-1">Start [↵]</b-button>
                         <b-form-select v-model="direction" :options="directions" class="mx-1"></b-form-select>
                         <b-form-spinbutton v-model="speed" min="1" max="240" :formatter-fn="speedFormatter" class="mx-1"></b-form-spinbutton>
                         <b-form-spinbutton v-model="durationTotal" min="1" max="999" :formatter-fn="durationTotalFormatter" class="mx-1"></b-form-spinbutton>
                         <b-form-spinbutton v-model="width" min="1" max="100" :formatter-fn="widthFormatter" class="mx-1"></b-form-spinbutton>
                         <verte v-model="background" model="rgb" class="mx-1"></verte>
                         <verte v-model="foreground" model="rgb" class="mx-1"></verte>
-                        <b-form-checkbox v-model="circle" size="lg" class="mx-1">Circulitos [C]</b-form-checkbox>
-                        <b-form-checkbox v-model="sound" size="lg" class="mx-1">Sonido [S]</b-form-checkbox>
+                        <b-form-checkbox v-model="circle" size="lg" class="mx-1">Circles [C]</b-form-checkbox>
+                        <b-form-checkbox v-model="sound" size="lg" class="mx-1">Sound [S]</b-form-checkbox>
                     </b-form>
                 </b-navbar-nav>
                 <b-navbar-nav class="ml-auto">
